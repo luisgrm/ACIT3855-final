@@ -1,0 +1,245 @@
+openapi: 3.0.3
+info:
+  version: '1.0'
+  title: Liga MX Soccer Match Event Analytics API
+  description: >
+    Service-based data ingestion API for receiving batched Liga MX match summary records and betting odds snapshot records.   
+
+    Primary dataset source: https://football-data.co.uk/
+
+paths:  
+  /match-summaries:
+    get:
+      summary: Gets match summary events over a time range
+      operationId: app.get_match_summaries
+      description: Gets match summary events received over a time range
+      parameters:
+        - name: start_timestamp
+          in: query
+          description: Start of the time range (inclusive)
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2026-02-06T03:30:00Z"
+        - name: end_timestamp
+          in: query
+          description: End of the time range (exclusive)
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2026-02-06T04:30:00Z"
+      responses:
+        "200":
+          description: Successfully returned a list of match summary events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchSummaryEvent"
+
+        "400":
+          description: Invalid time range
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /betting-odds:
+    get:
+      summary: Gets betting odds events over a time range
+      operationId: app.get_betting_odds
+      description: Gets betting odds events received over a time range
+      parameters:
+        - name: start_timestamp
+          in: query
+          description: Start of the time range (inclusive)
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2026-02-06T03:30:00Z"
+        - name: end_timestamp
+          in: query
+          description: End of the time range (exclusive)
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2026-02-06T04:30:00Z"
+      responses:
+        "200":
+          description: Successfully returned a list of betting odds events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BettingOddsEvent"
+
+        "400":
+          description: Invalid time range
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /health:
+    get:
+      tags:
+        - health
+      summary: Check health of the Storage service
+      operationId: app.get_health
+      description: Returns 200 if the Storage service is running
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string 
+
+components:
+  schemas:
+    MatchSummaryEvent:
+      type: object
+      description: A single match summary event (batch common fields + match summary fields).
+      required:
+        - sender_id
+        - sent_timestamp
+        - batch_id
+        - trace_id
+        - match_id
+        - league
+        - season
+        - match_date
+        - home_team_id
+        - home_team_name
+        - away_team_id
+        - away_team_name
+        - home_goals
+        - away_goals
+        - result
+      properties:
+        sender_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        sent_timestamp:
+          type: string
+          format: date-time
+          example: "2026-01-13T18:00:00Z"
+        batch_id:
+          type: string
+          format: uuid
+          example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        trace_id:
+          type: integer
+          format: int64
+          example: 1700000000000000000
+
+        match_id:
+          type: string
+          format: uuid
+          example: "a0b1c2d3-1111-2222-3333-444455556666"
+        league:
+          type: string
+          example: "Liga MX"
+        season:
+          type: string
+          example: "2012/2013"
+        match_date:
+          type: string
+          example: "21/07/2012"
+
+        home_team_id:
+          type: integer
+          example: 101
+        home_team_name:
+          type: string
+          example: "Chiapas"
+        away_team_id:
+          type: integer
+          example: 102
+        away_team_name:
+          type: string
+          example: "Tigres UANL"
+        home_goals:
+          type: integer
+          example: 0
+        away_goals:
+          type: integer
+          example: 4
+        result:
+          type: string
+          enum: [HT, AT, D]
+          example: "AT"
+
+    BettingOddsEvent:
+      type: object
+      description: A single betting odds event (batch common fields + betting odds fields).
+      required:
+        - sender_id
+        - sent_timestamp
+        - batch_id
+        - trace_id
+        - match_id
+        - bookmaker
+        - market
+        - outcome
+        - odds
+        - odds_type
+        - collected_at
+      properties:
+        sender_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        sent_timestamp:
+          type: string
+          format: date-time
+          example: "2026-01-13T18:05:00Z"
+        batch_id:
+          type: string
+          format: uuid
+          example: "7b4f2f13-0b1e-4d0b-9d7d-2c4c4c4c4c4c"
+        trace_id:
+          type: integer
+          format: int64
+          example: 1700000000000000000
+
+        match_id:
+          type: string
+          format: uuid
+          example: "a0b1c2d3-1111-2222-3333-444455556666"
+        bookmaker:
+          type: string
+          example: "Bet365"
+        market:
+          type: string
+          example: "Match Winner"
+        outcome:
+          type: string
+          example: "Home"
+        odds:
+          type: number
+          example: 2.93
+        odds_type:
+          type: string
+          enum: [historical, pre_match, live]
+          example: "historical"
+
+        collected_at:
+          type: string
+          example: "2012-07-21"

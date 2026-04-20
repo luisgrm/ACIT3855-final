@@ -1,0 +1,205 @@
+openapi: 3.0.3
+info:
+  version: '1.0'
+  title: Liga MX Soccer Match Event Analytics API
+  description: >
+    Service-based data ingestion API for receiving batched Liga MX match summary records and betting odds snapshot records.   
+
+    Primary dataset source: https://football-data.co.uk/
+
+paths:
+  /batches/match-summaries:
+    post:
+      summary: Reports a batch of match summary records
+      operationId: app.report_match_summaries
+      description: Adds a batch of completed Liga MX match summaries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MatchSummaryBatch"
+      responses:
+        "201":
+          description: batch successfully received
+        "400":
+          description: invalid input, object invalid
+
+  /batches/betting-odds:
+    post:
+      summary: Reports a batch of betting odds records
+      operationId: app.report_betting_odds
+      description: Adds a batch of betting odds snapshot records for Liga MX matches
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BettingOddsBatch"
+      responses:
+        "201":
+          description: batch successfully received
+        "400":
+          description: invalid input, object invalid
+
+  /health:
+    get:
+      tags:
+        - health
+      summary: Check health of the Receiver service
+      operationId: app.get_health
+      description: Returns 200 if the Receiver service is running
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    MatchSummaryBatch:
+      type: object
+      description: Batch of completed match summary records.
+      required:
+        - sender_id
+        - sent_timestamp
+        - batch_id
+        - items
+      properties:
+        sender_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        sent_timestamp:
+          type: string
+          format: date-time
+          example: "2026-01-13T18:00:00Z"
+        batch_id:
+          type: string
+          format: uuid
+          example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/MatchSummary"
+
+    MatchSummary:
+      type: object
+      description: A single completed match summary.
+      required:
+        - match_id
+        - league
+        - season
+        - match_date
+        - home_team_id
+        - home_team_name
+        - away_team_id
+        - away_team_name
+        - home_goals
+        - away_goals
+        - result
+      properties:
+        match_id:
+          type: string
+          format: uuid
+          example: "a0b1c2d3-1111-2222-3333-444455556666"
+        league:
+          type: string
+          example: "Liga MX"
+        season:
+          type: string
+          example: "2012/2013"
+        match_date:
+          type: string
+          example: "21/07/2012"
+        home_team_id:
+          type: integer
+          example: 101
+        home_team_name:
+          type: string
+          example: "Chiapas"
+        away_team_id:
+          type: integer
+          example: 102
+        away_team_name:
+          type: string
+          example: "Tigres UANL"
+        home_goals:
+          type: integer
+          example: 0
+        away_goals:
+          type: integer
+          example: 4
+        result:
+          type: string
+          enum: [HT, AT, D]
+          description: Match outcome indicator (HT = Home Team win, AT = Away Team win, D = Draw)
+          example: "AT"
+
+    BettingOddsBatch:
+      type: object
+      description: Batch of betting odds snapshot records.
+      required:
+        - sender_id
+        - sent_timestamp
+        - batch_id
+        - items
+      properties:
+        sender_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        sent_timestamp:
+          type: string
+          format: date-time
+          example: "2026-01-13T18:05:00Z"
+        batch_id:
+          type: string
+          format: uuid
+          example: "7b4f2f13-0b1e-4d0b-9d7d-2c4c4c4c4c4c"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BettingOdds"
+
+    BettingOdds:
+      type: object
+      description: A single betting odds record.
+      required:
+        - match_id
+        - bookmaker
+        - market
+        - outcome
+        - odds
+        - odds_type
+        - collected_at
+      properties:
+        match_id:
+          type: string
+          format: uuid
+          example: "a0b1c2d3-1111-2222-3333-444455556666"
+        bookmaker:
+          type: string
+          example: "Bet365"
+        market:
+          type: string
+          example: "Match Winner"
+        outcome:
+          type: string
+          example: "Home"
+        odds:
+          type: number
+          example: 2.93
+        odds_type:
+          type: string
+          enum: [historical, pre_match, live]
+          example: "historical"
+        collected_at:
+          type: string
+          format: date
+          example: "2012-07-21"

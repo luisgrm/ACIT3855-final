@@ -1,0 +1,7 @@
+connexion[flask]
+connexion[uvicorn]
+swagger-ui-bundle
+pyyaml
+APScheduler
+requests
+starlette

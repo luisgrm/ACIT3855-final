@@ -1,0 +1,6 @@
+connexion[flask]
+connexion[uvicorn]
+swagger-ui-bundle
+pyyaml
+httpx
+kafka-python

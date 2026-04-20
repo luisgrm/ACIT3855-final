@@ -1,0 +1,71 @@
+summaries
+{
+  "sender_id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "sent_timestamp": "2026-01-13T18:00:00Z",
+  "batch_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "match_id": "a0b1c2d3-1111-2222-3333-444455556666",
+  "league": "Liga MX",
+  "season": "2012/2013",
+  "match_date": "21/07/2012",
+  "home_team_id": 101,
+  "home_team_name": "Chiapas",
+  "away_team_id": 102,
+  "away_team_name": "Tigres UANL",
+  "home_goals": 0,
+  "away_goals": 4,
+  "result": "AT"
+}
+
+betting-odds
+{
+  "sender_id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "sent_timestamp": "2026-01-13T18:05:00Z",
+  "batch_id": "7b4f2f13-0b1e-4d0b-9d7d-2c4c4c4c4c4c",
+  "match_id": "a0b1c2d3-1111-2222-3333-444455556666",
+  "bookmaker": "Bet365",
+  "market": "Match Winner",
+  "outcome": "Home",
+  "odds": 2.93,
+  "odds_type": "historical",
+  "collected_at": "2012-07-21"
+}
+
+Receiver betting-odds
+{
+  "sender_id": "test",
+  "sent_timestamp": "2026-01-19T00:00:00Z",
+  "batch_id": "bad2",
+  "items": [
+    {
+      "match_id": "m1",
+      "bookmaker": "Bet365",
+      "market": "Match Winner",
+      "outcome": "Home",
+      "odds": "NOT_A_NUMBER",
+      "odds_type": "historical",
+      "collected_at": "2012-07-21"
+    }
+  ]
+}
+
+Receiver matches
+{
+  "sender_id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "sent_timestamp": "2026-01-13T18:00:00Z",
+  "batch_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "items": [
+    {
+      "match_id": "a0b1c2d3-1111-2222-3333-444455556666",
+      "league": "Liga MX",
+      "season": "2012/2013",
+      "match_date": "21/07/2012",
+      "home_team_id": 101,
+      "home_team_name": "Chiapas",
+      "away_team_id": 102,
+      "away_team_name": "Tigres UANL",
+      "home_goals": 4,
+      "away_goals": 4,
+      "result": "AT"
+    }
+  ]
+}

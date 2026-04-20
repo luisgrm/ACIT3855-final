@@ -1,0 +1,11 @@
+scheduler:
+  interval: 5
+
+datastore:
+  filename: data.json
+
+eventstore:
+  match_summaries:
+    url: http://storage:8090/storage/match-summaries
+  betting_odds:
+    url: http://storage:8090/storage/betting-odds

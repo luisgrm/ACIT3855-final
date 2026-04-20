@@ -1,0 +1,14 @@
+version: 1
+
+datastore:
+  user: storage_user
+  password: storage_passwd
+  hostname: db
+  port: 3306
+  db: storage_db
+
+kafka:
+  hostname: kafka
+  port: 29092
+  topic: events
+  consumer_group: storage_groupv2

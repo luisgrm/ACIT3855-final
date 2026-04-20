@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="ACIT3855 Liga MX Dashboard" />
+    <script src="updateStats.js"></script>
+    <title>ACIT3855 - Liga MX Dashboard</title>
+</head>
+
+<body>
+    <main id="main">
+        <div id="header">
+            <h1>Liga MX Event Dashboard</h1>
+            <div id="logo-section">
+                <img src="LigaMX-logo.png" alt="Liga MX Dashboard Logo">
+            </div>
+        </div>
+
+        <h5 id="last-updated">
+            Last Data Update: <span id="last-updated-value">N/A</span>
+        </h5>
+
+        <h2>Backend Service Health</h2>
+            <div id="health-status">
+                <div>
+                    <h3>Service Status</h3>
+
+                    <div class="health-row">
+                        <span class="health-label">Receiver</span>
+                        <span id="receiver-status" class="status-badge status-unknown">Unknown</span>
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">Storage</span>
+                        <span id="storage-status" class="status-badge status-unknown">Unknown</span>
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">Processing</span>
+                        <span id="processing-status" class="status-badge status-unknown">Unknown</span>
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">Analyzer</span>
+                        <span id="analyzer-status" class="status-badge status-unknown">Unknown</span>
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">Last Health Update</span>
+                        <span id="health-last-update">Not available</span>
+                    </div>
+                </div>
+            </div>
+
+        <div id="messages"></div>
+
+        <h2>Statistics</h2>
+        <div id="statistics">
+            <div id="processing">
+                <h3>Processing Service Stats</h3>
+                <code id="processing-stats">Waiting for processing stats...</code>
+            </div>
+
+            <div id="analyzer-stats-section">
+                <h3>Analyzer Service Stats</h3>
+                <code id="analyzer-stats">Waiting for analyzer stats...</code>
+            </div>
+        </div>
+        
+        <h2>Analyzer events</h2>
+        <div id="analyzer-events">
+            <div>
+                <h3>Match Summary Event</h3>
+                <code id="event-match-summary">Waiting for match summary event...</code>
+            </div>
+
+            <div>
+                <h3>Betting Odds Event</h3>
+                <code id="event-betting-odds">Waiting for betting odds event...</code>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

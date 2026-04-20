@@ -1,0 +1,97 @@
+# Create events:1:1
+docker exec -it acit3855-lab7-kafka-1 \
+  kafka-topics --bootstrap-server localhost:9092 \
+  --create --if-not-exists --topic events --partitions 1 --replication-factor 1
+
+# Create events:1:1 with Docker Compose
+docker compose exec kafka \
+kafka-topics --bootstrap-server localhost:9092 \
+--create --if-not-exists --topic events --partitions 1 --replication-factor 1
+
+# Delete Events topic
+docker exec -it acit3855-lab7-kafka-1 kafka-topics --bootstrap-server localhost:9092 --delete --topic events
+
+# Delete Events topic with Docker Compose
+docker compose exec kafka \
+  kafka-topics --bootstrap-server localhost:9092 \
+  --delete --topic events
+
+# Topics List
+docker exec -it acit3855-lab6-kafka-1 \
+  kafka-topics --bootstrap-server localhost:9092 --list
+
+# Topics List with Docker Compose
+docker compose exec kafka \
+  kafka-topics --bootstrap-server localhost:9092 \
+  --list
+
+# Listener
+docker exec -it acit3855-lab6-kafka-1 \
+  kafka-console-consumer --bootstrap-server localhost:9092 \
+  --topic events
+
+# Listener with Docker Compose
+docker compose exec kafka \
+  kafka-console-consumer --bootstrap-server localhost:9092 \
+  --topic events --from-beginning
+
+# WORKFLOW DOCKER COMPOSE
+docker compose down -v
+docker compose up --build -d
+docker compose exec storage python3 create_tables.py
+docker compose exec kafka kafka-topics --bootstrap-server localhost:9092 --create --if-not-exists --topic events --partitions 1 --replication-factor 1
+docker compose restart storage
+
+# DB Verification
+docker compose exec db mysql -ustorage_user -pstorage_passwd storage_db
+
+# Then
+SHOW TABLES;
+SELECT COUNT(*) FROM match_summaries;
+SELECT COUNT(*) FROM betting_odds;
+================================================
+curl -i -X POST "http://localhost:8080/batches/match-summaries" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sender_id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+    "sent_timestamp": "2026-01-13T18:00:00Z",
+    "batch_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "items": [
+      {
+        "match_id": "a0b1c2d3-1111-2222-3333-444455556666",
+        "league": "Liga MX",
+        "season": "2012/2013",
+        "match_date": "21/07/2012",
+        "home_team_id": 101,
+        "home_team_name": "Chiapas",
+        "away_team_id": 102,
+        "away_team_name": "Tigres UANL",
+        "home_team_name": "Chiapas",
+        "away_team_name": "Tigres UANL",
+        "home_goals": 4,
+        "away_goals": 4,
+        "result": "AT"
+      }
+    ]
+  }'
+
+
+============
+curl -i -X POST "http://localhost:8080/batches/betting-odds" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sender_id": "test",
+    "sent_timestamp": "2026-01-19T00:00:00Z",
+    "batch_id": "bad2",
+    "items": [
+      {
+        "match_id": "m1",
+        "bookmaker": "Bet365",
+        "market": "Match Winner",
+        "outcome": "Home",
+        "odds": "NOT_A_NUMBER",
+        "odds_type": "historical",
+        "collected_at": "2012-07-21"
+      }
+    ]
+  }'

@@ -1,0 +1,17 @@
+version: 1
+
+service:
+  port: 8120
+
+scheduler:
+  interval: 15
+  timeout: 5
+
+health_urls:
+  receiver: http://receiver:8080/receiver/health
+  storage: http://storage:8090/storage/health
+  processing: http://processing:8100/processing/health
+  analyzer: http://analyzer:8110/analyzer/health
+
+datastore:
+  filename: /data/health/health_status.json

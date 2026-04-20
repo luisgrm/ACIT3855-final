@@ -1,0 +1,257 @@
+openapi: 3.0.3
+info:
+  version: "1.0.0"
+  title: Analyzer API
+  description: Inspect Kafka history and compute statistics for events
+
+paths:
+  /match-summaries:
+    get:
+      summary: Get a match_summaries event by type-index from Kafka history
+      operationId: app.get_match_summary_event
+      description: >
+        Returns the Nth match_summaries event in the Kafka topic.
+        Note: index is per-event-type (not the raw Kafka offset).
+      parameters:
+        - name: index
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+          example: 0
+      responses:
+        "200":
+          description: Successfully returned a match summary event payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchSummaryEventPayload"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+
+  /betting-odds:
+    get:
+      summary: Get a betting_odds event by type-index from Kafka history
+      operationId: app.get_betting_odds_event
+      description: >
+        Returns the Nth betting_odds event in the Kafka topic.
+        Note: index is per-event-type (not the raw Kafka offset).
+      parameters:
+        - name: index
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+          example: 0
+      responses:
+        "200":
+          description: Successfully returned a betting odds event payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BettingOddsEventPayload"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+
+  /stats:
+    get:
+      summary: Get counts of each event type currently in Kafka history
+      operationId: app.get_stats
+      description: Counts the number of each event type found in the Kafka topic.
+      responses:
+        "200":
+          description: Successfully returned statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stats"
+
+  /health:
+    get:
+      tags:
+        - health
+      summary: Check health of the Analyzer service
+      operationId: app.get_health
+      description: Returns 200 if the Analyzer service is running
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    ErrorMessage:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: "No event at index 10"
+
+    Stats:
+      type: object
+      required:
+        - num_match_summaries
+        - num_betting_odds
+      properties:
+        num_match_summaries:
+          type: integer
+          example: 100
+        num_betting_odds:
+          type: integer
+          example: 100
+
+
+    MatchSummaryEventPayload:
+      type: object
+      required:
+        - sender_id
+        - sent_timestamp
+        - batch_id
+        - trace_id
+        - match_id
+        - league
+        - season
+        - match_date
+        - home_team_id
+        - home_team_name
+        - away_team_id
+        - away_team_name
+        - home_goals
+        - away_goals
+        - result
+      properties:
+        sender_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        sent_timestamp:
+          type: string
+          format: date-time
+          example: "2026-01-13T18:00:00Z"
+        batch_id:
+          type: string
+          format: uuid
+          example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        trace_id:
+          type: integer
+          format: int64
+          example: 1700000000000000000
+        match_id:
+          type: string
+          format: uuid
+          example: "a0b1c2d3-1111-2222-3333-444455556666"
+        league:
+          type: string
+          example: "Liga MX"
+        season:
+          type: string
+          example: "2012/2013"
+        match_date:
+          type: string
+          example: "21/07/2012"
+        home_team_id:
+          type: integer
+          example: 101
+        home_team_name:
+          type: string
+          example: "Chiapas"
+        away_team_id:
+          type: integer
+          example: 102
+        away_team_name:
+          type: string
+          example: "Tigres UANL"
+        home_goals:
+          type: integer
+          example: 4
+        away_goals:
+          type: integer
+          example: 4
+        result:
+          type: string
+          example: "AT"
+
+    BettingOddsEventPayload:
+      type: object
+      required:
+        - sender_id
+        - sent_timestamp
+        - batch_id
+        - trace_id
+        - match_id
+        - bookmaker
+        - market
+        - outcome
+        - odds
+        - odds_type
+        - collected_at
+      properties:
+        sender_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        sent_timestamp:
+          type: string
+          format: date-time
+          example: "2026-01-19T00:00:00Z"
+        batch_id:
+          type: string
+          format: uuid
+          example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        trace_id:
+          type: integer
+          format: int64
+          example: 1700000000000000000
+        match_id:
+          type: string
+          format: uuid
+          example: "a0b1c2d3-1111-2222-3333-444455556666"
+        bookmaker:
+          type: string
+          example: "Bet365"
+        market:
+          type: string
+          example: "Match Winner"
+        outcome:
+          type: string
+          example: "Home"
+        odds:
+          type: number
+          example: 2.2
+        odds_type:
+          type: string
+          example: "historical"
+        collected_at:
+          type: string
+          format: date
+          example: "2012-07-21"

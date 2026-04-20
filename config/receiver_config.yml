@@ -1,0 +1,12 @@
+version: 1
+
+kafka:
+  hostname: kafka
+  port: 29092
+  topic: events
+
+events:
+  match_summaries:
+    url: http://storage:8090/batches/match-summaries
+  betting_odds:
+    url: http://storage:8090/batches/betting-odds

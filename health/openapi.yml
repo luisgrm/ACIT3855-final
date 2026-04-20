@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  title: Health Check API
+  version: "1.0.0"
+  description: API for retrieving the health status of backend services
+
+paths:
+  /health-status:
+    get:
+      summary: Get current health status of all backend services
+      operationId: app.get_health_status
+      description: Returns the current stored health status of receiver, storage, processing, and analyzer
+      responses:
+        '200':
+          description: Successfully returned health statuses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  receiver:
+                    type: string
+                  storage:
+                    type: string
+                  processing:
+                    type: string
+                  analyzer:
+                    type: string
+                  last_update:
+                    type: string
