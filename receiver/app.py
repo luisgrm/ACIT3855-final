@@ -26,6 +26,10 @@ KAFKA_HOST = app_config["kafka"]["hostname"]
 KAFKA_PORT = app_config["kafka"]["port"]
 KAFKA_TOPIC = app_config["kafka"]["topic"]
 
+# Date helper function
+def utc_now_z():
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
 # --- Kafka Producer Wrapper ---
 
 class KafkaProducerWrapper:
@@ -173,6 +177,10 @@ def report_betting_odds(body):
 def get_health():
     # Return health status for the Receiver service
     return {"message": "healthy"}, 200
+
+def get_stats():
+    # Return stats for the Receiver service
+    return utc_now_z, 200
 
 # --- App Setup ---
 

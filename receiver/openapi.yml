@@ -60,6 +60,23 @@ paths:
                   message:
                     type: string
 
+  /stats:
+    get:
+      summary: Checks the status of the Receiver
+      operationId: app.get_stats
+      description: Service is ok if this endpoints returns a responses
+      reponses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_datetime:
+                    type: string
+                    example: 2025-12-12 9:35:34
+
 components:
   schemas:
     MatchSummaryBatch:
