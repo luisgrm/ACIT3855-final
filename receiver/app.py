@@ -180,7 +180,7 @@ def get_health():
 
 def get_stats():
     # Return stats for the Receiver service
-    return utc_now_z, 200
+    return datetime.now(), 200
 
 # --- App Setup ---
 
