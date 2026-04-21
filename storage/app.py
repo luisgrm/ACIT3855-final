@@ -256,7 +256,7 @@ def get_health():
     return {"message": "healthy"}, 200
 
 @use_db_session
-def get_event_statsget_event_stats(session):
+def get_event_statsget_event_stats(session, num_match_summaries, num_betting_odds):
     statement1 = (
         select(BettingOdds)
     )
