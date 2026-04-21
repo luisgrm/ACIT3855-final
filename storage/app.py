@@ -282,7 +282,7 @@ def get_event_statsget_event_stats(session, num_match_summaries, num_betting_odd
 app = connexion.FlaskApp(__name__, specification_dir="")
 app.add_api("openapi.yml",
             base_path="/storage",
-            strict_validation=True,
+            #strict_validation=True,
             validate_responses=True)
 
 if __name__ == "__main__":
