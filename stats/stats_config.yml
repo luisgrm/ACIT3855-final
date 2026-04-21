@@ -1,0 +1,20 @@
+version: 1
+
+service:
+  port: 8130
+
+scheduler:
+  interval: 15
+  timeout: 5
+
+datastore:
+  filename: stats.json
+
+service_urls:
+  receiver: http://receiver:8080/receiver/health
+  storage: http://storage:8090/storage/health
+  processing: http://processing:8100/processing/health
+  analyzer: http://analyzer:8110/analyzer/health
+
+datastore:
+  filename: /data/stats/services_stats.json
