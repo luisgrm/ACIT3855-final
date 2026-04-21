@@ -258,7 +258,7 @@ components:
           example: "2012-07-21"
 
     Stats:
-      type: object
+      type: integer
       required:
         - num_match_summaries
         - num_betting_odds
