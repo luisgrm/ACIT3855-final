@@ -262,20 +262,20 @@ def get_event_statsget_event_stats(session):
     )
 
     rows = session.execute(statement1).scalars().all()
-    results_matches = 0
+    num_match_summaries = 0
     for row in rows:
-        results_matches += 1
+        num_match_summaries += 1
 
     statement2 = (
         select(BettingOdds)
     )
 
     rows = session.execute(statement2).scalars().all()
-    results_odds = 0
+    num_betting_odds = 0
     for row in rows:
-        results_odds += 1
+        num_betting_odds += 1
     
-    return results_matches, results_odds, 200
+    return num_match_summaries, num_betting_odds, 200
 
 # --- App Setup ---
 
